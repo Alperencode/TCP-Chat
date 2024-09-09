@@ -1,0 +1,10 @@
+name: Release App Pipeline
+
+on:
+  repository_dispatch:
+    types: [release-app]
+
+jobs:
+  systemd-pipeline:
+    uses: alperencode/actions/.github/workflows/release-go-app.yml.yml
+    secrets: inherit
