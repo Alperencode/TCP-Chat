@@ -1,0 +1,10 @@
+name: Release App Pipeline
+
+on:
+  repository_dispatch:
+    types: [release-app]
+
+jobs:
+  release-pipeline:
+    uses: alperencode/actions/.github/workflows/release-app.yml@master
+    secrets: inherit
