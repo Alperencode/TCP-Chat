@@ -1,0 +1,38 @@
+name: Release App Pipeline
+
+on:
+  repository_dispatch:
+    types: [release-app]
+
+jobs:
+  release-pipeline:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout tcp-chat repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout actions repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          repository: alperencode/actions
+          path: .github/actions-repo
+          token: ${{ secrets.DISPATCH_TOKEN }}
+
+      - name: Run Release Pipeline
+        id: release
+        uses: ./.github/actions-repo/.github/actions/release-app
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          dispatch-token: ${{ secrets.DISPATCH_TOKEN }}
+
+      - name: Output results
+        run: |
+          echo "Version: ${{ steps.release.outputs.version }}"
+          echo "Version Exists: ${{ steps.release.outputs.version-exists }}"
+          echo "Repo Name: ${{ steps.release.outputs.repo-name }}"
