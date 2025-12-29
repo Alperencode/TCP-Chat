@@ -2,7 +2,9 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"log/slog"
+	"tcp-chat/internal/client"
+	"tcp-chat/internal/server"
 )
 
 func main() {
@@ -11,8 +13,12 @@ func main() {
 
 	switch *typeFlagPtr {
 	case "client":
+		client := client.NewClient()
+		slog.Info("Client created.", "Client", client)
 	case "server":
+		server := server.NewServer()
+		slog.Info("Server created.", "Server", server)
 	default:
-		fmt.Println("Type should be a client or server")
+		slog.Error("Type should be a client or server", "Type", *typeFlagPtr)
 	}
 }
